@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white">
+
+<header class="bg-primary p-3">
+    <nav class="container d-flex justify-content-between">
+        <ul class="nav">
+            <li class="nav-item"><a class="nav-link text-white" href="/home">Home</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/dashboard">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/profile">Profile</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container mt-4">
+    <h1 class="text-center">Welcome, <%= user.username %></h1>
+
+    <button class="btn btn-primary my-3" onclick="openModal('addNoteModal')">Add Note</button>
+
+    <h2>Your Notes</h2>
+    <div class="row">
+        <% notes.forEach(note => { %>
+            <div class="col-md-4">
+                <div class="card bg-secondary text-white mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= note.title %></h5>
+                        <p class="card-text"><%= note.content %></p>
+                        <button class="btn btn-danger btn-sm" onclick="openModal('deleteNoteModal', '<%= note._id %>')">Delete</button>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+
+    <h2>Create new post</h2>
+    <form action="/posts/add" method="POST" class="mb-4">
+        <div class="mb-3">
+            <input type="text" class="form-control" name="title" placeholder="Heading" required>
+        </div>
+        <div class="mb-3">
+            <textarea class="form-control" name="content" placeholder="Content" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Add</button>
+    </form>
+
+    <% posts.forEach(post => { %>
+        <div class="card bg-secondary text-white mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><%= post.title %></h5>
+                <p class="card-text"><%= post.content.substring(0, 100) %>...</p>
+                <a href="/post/<%= post._id %>" class="btn btn-light btn-sm">Read more</a>
+                <a href="/posts/edit/<%= post._id %>" class="btn btn-warning btn-sm">Edit</a>
+                <form action="/posts/delete/<%= post._id %>" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </div>
+        </div>
+    <% }); %>
+
+</div>
+
+<!-- Модальное окно для добавления заметки -->
+<div id="addNoteModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Note</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/notes/add" method="POST">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="title" placeholder="Title" required>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" name="content" placeholder="Your note..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для удаления заметки -->
+<div id="deleteNoteModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Are you sure?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="deleteNoteForm" method="POST">
+                    <button type="submit" class="btn btn-danger w-100">Delete</button>
+                    <button type="button" class="btn btn-secondary w-100 mt-2" data-bs-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Уведомление -->
+<div id="notification" class="toast align-items-center text-bg-success position-fixed top-0 end-0 m-3" role="alert">
+    <div class="d-flex">
+        <div class="toast-body"></div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function openModal(id, noteId = null) {
+    const modal = new bootstrap.Modal(document.getElementById(id));
+    modal.show();
+    if (noteId) {
+        document.getElementById("deleteNoteForm").action = `/notes/delete/${noteId}`;
+    }
+}
+
+function showNotification(message) {
+    const toastEl = document.getElementById("notification");
+    toastEl.querySelector(".toast-body").innerText = message;
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
+}
+</script>
+
+</body>
+</html>

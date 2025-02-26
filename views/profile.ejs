@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white">
+
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="#">MyApp</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/profile">Profile</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Профиль -->
+<div class="container mt-5">
+    <div class="card bg-secondary text-white mx-auto" style="max-width: 400px;">
+        <div class="card-body text-center">
+            <h1 class="h4">Your Profile</h1>
+            <img src="<%= user.avatar %>" alt="Avatar" class="rounded-circle border border-warning mb-3" width="100" height="100">
+            <button class="btn btn-primary d-block w-100 mb-2" onclick="openModal('avatarModal')">Change Avatar</button>
+            <button class="btn btn-warning d-block w-100 mb-2 text-dark" onclick="openModal('passwordModal')">Change Password</button>
+            <button class="btn btn-danger d-block w-100" onclick="logout()">Logout</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно смены пароля -->
+<div class="modal fade" id="passwordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Password</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/update-password" method="POST">
+                    <input type="password" class="form-control mb-2" name="newPassword" placeholder="New Password" required>
+                    <button type="submit" class="btn btn-success w-100">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно смены аватара -->
+<div class="modal fade" id="avatarModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Avatar</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/upload-avatar" method="POST" enctype="multipart/form-data">
+                    <input type="file" class="form-control mb-2" name="avatar" required>
+                    <button type="submit" class="btn btn-success w-100">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Открытие модального окна
+function openModal(id) {
+    let modal = new bootstrap.Modal(document.getElementById(id));
+    modal.show();
+}
+
+// Logout
+function logout() {
+    window.location.href = "/logout";
+}
+</script>
+
+</body>
+</html>
