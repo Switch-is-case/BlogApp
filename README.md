@@ -29,6 +29,10 @@ BlogApp is a web application designed to provide users with a platform to create
 
 4. Open your browser and navigate to `http://localhost:3000`.
 
+![image](https://github.com/user-attachments/assets/2af62b4f-399b-4416-a411-3db0f77a68a4)
+
+![image](https://github.com/user-attachments/assets/c63f05e6-a1ab-4c58-84a6-940496864447)
+
 ## API Documentation
 
 ### Endpoints
